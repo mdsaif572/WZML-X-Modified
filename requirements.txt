@@ -18,6 +18,7 @@ httpx
 langcodes
 jinja2
 lxml
+megasdk @ file://./megasdk-4.8.0-py2.py3-none-any.whl
 motor
 natsort
 par2cmdline-turbo
