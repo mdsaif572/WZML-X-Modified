@@ -248,7 +248,7 @@ async def get_readable_message(sid, is_user, page_no=1, status="All", page_step=
                     pass
         elif tstatus == MirrorStatus.STATUS_SEED:
             msg += f"\n┠ <b>Size:</b> {task.size()} | <b>Uploaded:</b> {task.uploaded_bytes()}"
-            msg += f"\n┠ <b>Status:</b> <b>{tstatus}</b>"
+            msg += f"\n┠ <b>Status:</b> <b> {tstatus}</b>"
             msg += f"\n┠ <b>Speed:</b> {task.seed_speed()}"
             msg += f"\n┠ <b>Ratio:</b> {task.ratio()}"
             msg += f"\n┠ <b>Time:</b> {task.seeding_time()} | <b>Elapsed:</b> {get_readable_time(elapsed)}"
