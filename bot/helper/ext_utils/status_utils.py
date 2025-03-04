@@ -239,7 +239,7 @@ async def get_readable_message(sid, is_user, page_no=1, status="All", page_step=
             msg += f"\n┠ <b>Processed:</b> {task.processed_bytes()}{subsize} of {task.size()}"
             if count:
                 msg += f"\n┠ <b>Count: {count}</b>"
-            msg += f"\n┠ <b>Status:</b> <b><a href='{task.listener.message.link}'> {tstatus}</a></b> | <b>ETA:</b> {task.eta()}"
+            msg += f"\n┠ <b>Status:</b><b><a href='{task.listener.message.link}'> {tstatus}</a></b> | <b>ETA:</b> {task.eta()}"
             msg += f"\n┠ <b>Speed:</b> {task.speed()} | <b>Elapsed:</b> {get_readable_time(elapsed)}"
             if hasattr(task, "seeders_num"):
                 try:
