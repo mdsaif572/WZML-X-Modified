@@ -260,7 +260,7 @@ async def get_readable_message(sid, is_user, page_no=1, status="All", page_step=
         msg += f"\n┠ <b>User: {task.listener.message.from_user.mention(style='html')}</b> | <b>ID:</b> <code>{task.listener.message.from_user.id}</code>"
         # Added Bt Sel(Copy Paste Needed)
         if hasattr(task, "seeders_num"):
-            msg+= f"\n <b>┠ Btsel:</b> <code>/{BotCommands.SelectCommand[1]} {task.gid()}</code>"
+            msg+= f"\n<b>┠ Btsel:</b> <code>/{BotCommands.SelectCommand[1]} {task.gid()}</code>"
         msg += f"\n<b>┖ Cancel:</b> /{BotCommands.CancelTaskCommand[1]}_{task.gid()}\n\n"
 
     if len(msg) == 0:
