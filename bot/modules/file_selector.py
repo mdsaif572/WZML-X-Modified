@@ -7,17 +7,22 @@ from .. import (
     LOGGER,
     sabnzbd_client,
 )
+from web.wserver import aria2
 from ..core.config_manager import Config
 from ..core.torrent_manager import TorrentManager
 from ..helper.ext_utils.bot_utils import (
     bt_selection_buttons,
     new_task,
+    sync_to_async
 )
-from ..helper.ext_utils.status_utils import get_task_by_gid, MirrorStatus
+from ..helper.ext_utils.task_manager import limit_checker
+from ..helper.ext_utils.status_utils import get_task_by_gid, MirrorStatus, get_readable_file_size
 from ..helper.telegram_helper.message_utils import (
     send_message,
     send_status_message,
     delete_message,
+    delete_links,
+    auto_delete_message
 )
 
 
@@ -133,6 +138,19 @@ async def confirm_selection(_, query):
                     await TorrentManager.qbittorrent.torrents.start([id_])
             else:
                 res = await TorrentManager.aria2.getFiles(id_)
+                if limit_exceeded := await limit_checker(task.listener):
+                    LOGGER.info(f"Torrent Limit Exceeded: {task.listener.name} | {get_readable_file_size(task.listener.size)}")
+                    amsg = await task.listener.on_download_error(limit_exceeded)
+                    await sync_to_async(
+                        aria2.client.remove,
+                        id_
+                    )
+                    await delete_links(task.listener.message)
+                    await auto_delete_message(
+                        task.listener.message,
+                        amsg
+                    )
+                    return
                 for f in res:
                     if f["selected"] == "false" and await aiopath.exists(f["path"]):
                         try:
