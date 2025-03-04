@@ -371,3 +371,15 @@ async def send_status_message(msg, user_id=0):
             intervals["status"][sid] = SetInterval(
                 Config.STATUS_UPDATE_INTERVAL, update_status_message, sid
             )
+
+async def is_admin(message, user_id=None):
+    if message.chat.type == message.chat.type.PRIVATE:
+        return
+    if user_id:
+        member = await message.chat.get_member(user_id)
+    else:
+        member = await message.chat.get_member(message.from_user.id)
+    return member.status in [
+        member.status.ADMINISTRATOR,
+        member.status.OWNER
+    ]
