@@ -51,7 +51,7 @@ class EngineStatus:
         self.STATUS_SABNZBD = f"SABnzbd+ v{bot_cache['eng_versions']['SABnzbd+']}"
         self.STATUS_QUEUE = "QSystem v2"
         self.STATUS_JD = "JDownloader v2"
-        self.STATUS_MEGA = f"Mega-SDK v{bot_cache['eng_versions']['megasdk']}"
+        #self.STATUS_MEGA = f"Mega-SDK v{bot_cache['eng_versions']['megasdk']}"
 
 
 STATUSES = {
