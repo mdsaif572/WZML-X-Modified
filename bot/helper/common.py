@@ -83,7 +83,6 @@ class TaskConfig:
         self.proceed_count = 0
         self.is_leech = False
         self.is_qbit = False
-        self.isMega = is_mega_link(self.source_url) if self.source_url else False
         self.is_nzb = False
         self.is_jd = False
         self.is_clone = False
@@ -124,6 +123,7 @@ class TaskConfig:
         self.files_to_proceed = []
         self.is_super_chat = self.message.chat.type.name in ["SUPERGROUP", "CHANNEL"]
         self.source_url = None
+        self.isMega = is_mega_link(self.source_url) if self.source_url else False
         self.bot_pm = Config.BOT_PM or self.user_dict.get('BOT_PM')
         self.pm_msg = None
         self.file_details = {}
