@@ -41,7 +41,7 @@ bot_loop = new_event_loop()
 set_event_loop(bot_loop)
 
 basicConfig(
-    format="[%(asctime)s] [%(levelname)s] - %(message)s",  #  [%(filename)s:%(lineno)d]
+    format="[%(asctime)s] [%(levelname)s] - %(message)s [%(filename)s:%(lineno)d]",
     datefmt="%d-%b-%y %I:%M:%S %p",
     handlers=[FileHandler("log.txt"), StreamHandler()],
     level=INFO,

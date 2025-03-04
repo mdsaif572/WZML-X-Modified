@@ -21,20 +21,20 @@ SIZE_UNITS = ["B", "KB", "MB", "GB", "TB", "PB"]
 
 
 class MirrorStatus:
-    STATUS_UPLOAD = "Upload"
-    STATUS_DOWNLOAD = "Download"
-    STATUS_CLONE = "Clone"
-    STATUS_QUEUEDL = "QueueDl"
-    STATUS_QUEUEUP = "QueueUp"
-    STATUS_PAUSED = "Pause"
-    STATUS_ARCHIVE = "Archive"
-    STATUS_EXTRACT = "Extract"
-    STATUS_SPLIT = "Split"
-    STATUS_CHECK = "CheckUp"
-    STATUS_SEED = "Seed"
-    STATUS_SAMVID = "SamVid"
-    STATUS_CONVERT = "Convert"
-    STATUS_FFMPEG = "FFmpeg"
+    STATUS_UPLOAD = "Upload 📤"
+    STATUS_DOWNLOAD = "Download 📥"
+    STATUS_CLONE = "Clone 🔃"
+    STATUS_QUEUEDL = "QueueDl ⏳"
+    STATUS_QUEUEUP = "QueueUp ⏳"
+    STATUS_PAUSED = "Pause ⛔️"
+    STATUS_ARCHIVE = "Archive 🛠"
+    STATUS_EXTRACT = "Extract 📂"
+    STATUS_SPLIT = "Split ✂️"
+    STATUS_CHECK = "CheckUp ⏱"
+    STATUS_SEED = "Seed 🌧"
+    STATUS_SAMVID = "SamVid 🎥"
+    STATUS_CONVERT = "Convert 🔃"
+    STATUS_FFMPEG = "FFmpeg 📝"
 
 
 class EngineStatus:
@@ -51,7 +51,7 @@ class EngineStatus:
         self.STATUS_SABNZBD = f"SABnzbd+ v{bot_cache['eng_versions']['SABnzbd+']}"
         self.STATUS_QUEUE = "QSystem v2"
         self.STATUS_JD = "JDownloader v2"
-        #self.STATUS_MEGA = f"Mega-SDK v{bot_cache['eng_versions']['megasdk']}"
+        self.STATUS_MEGA = "Mega-SDK v4.8.0"
 
 
 STATUSES = {
@@ -185,14 +185,14 @@ def speed_string_to_bytes(size_text: str):
 def get_progress_bar_string(pct):
     pct = float(str(pct).strip("%"))
     p = min(max(pct, 0), 100)
-    cFull = int(p // 8)
-    p_str = "⬢" * cFull
-    p_str += "⬡" * (12 - cFull)
+    cFull = int(p // 10)
+    p_str = "★" * cFull
+    p_str += "☆" * (10 - cFull)
     return f"[{p_str}]"
 
 
 async def get_readable_message(sid, is_user, page_no=1, status="All", page_step=1):
-    msg = ""
+    msg = "<a href='https://t.me/JetMirror'>𝑩𝒐𝒕 𝒃𝒚 🚀 𝑱𝒆𝒕-𝑴𝒊𝒓𝒓𝒐𝒓</a>\n"
     button = None
 
     tasks = await get_specific_tasks(status, sid if is_user else None)
@@ -217,22 +217,18 @@ async def get_readable_message(sid, is_user, page_no=1, status="All", page_step=
             tstatus = await task.status()
         else:
             tstatus = task.status()
-        msg += f"<b>{index + start_position}.</b> "
+        msg += (f"\n<pre>#JetBot{index + start_position} ❤🚀...(Processing)</pre>\n")
         msg += f"<b><i>{escape(f'{task.name()}')}</i></b>"
         if task.listener.subname:
-            msg += f"\n┖ <b>Sub Name</b> → <i>{task.listener.subname}</i>"
+            msg += f"\n┖ <b>Sub Name</b>: <i>{task.listener.subname}</i>"
         elapsed = time() - task.listener.message.date.timestamp()
-
-        msg += f"\n\n<b>Task By {task.listener.message.from_user.mention(style='html')} </b> ( #ID{task.listener.message.from_user.id} )"
-        if task.listener.is_super_chat:
-            msg += f" <i>[<a href='{task.listener.message.link}'>Link</a>]</i>"
 
         if (
             tstatus not in [MirrorStatus.STATUS_SEED, MirrorStatus.STATUS_QUEUEUP]
             and task.listener.progress
         ):
             progress = task.progress()
-            msg += f"\n┟ {get_progress_bar_string(progress)} <i>{progress}</i>"
+            msg += f"\n┟ {get_progress_bar_string(progress)} {progress}"
             if task.listener.subname:
                 subsize = f" / {get_readable_file_size(task.listener.subsize)}"
                 ac = len(task.listener.files_to_proceed)
@@ -240,30 +236,32 @@ async def get_readable_message(sid, is_user, page_no=1, status="All", page_step=
             else:
                 subsize = ""
                 count = ""
-            msg += f"\n┠ <b>Processed</b> → <i>{task.processed_bytes()}{subsize} of {task.size()}</i>"
+            msg += f"\n┠ <b>Processed:</b> {task.processed_bytes()}{subsize} of {task.size()}"
             if count:
-                msg += f"\n┠ <b>Count:</b> → <b>{count}</b>"
-            msg += f"\n┠ <b>Status</b> → <b>{tstatus}</b>"
-            msg += f"\n┠ <b>Speed</b> → <i>{task.speed()}</i>"
-            msg += f"\n┠ <b>Time</b> → <i>{task.eta()} of {get_readable_time(elapsed + get_raw_time(task.eta()))} ( {get_readable_time(elapsed)} )</i>"
+                msg += f"\n┠ <b>Count: {count}</b>"
+            msg += f"\n┠ <b>Status:</b <b><a href='{task.listener.message.link}'>{tstatus}</a></b> | <b>ETA:</b> {task.eta()}"
+            msg += f"\n┠ <b>Speed:</b> {task.speed()} | <b>Elapsed:</b> {get_readable_time(elapsed)}"
             if hasattr(task, "seeders_num"):
                 try:
-                    msg += f"\n┠ <b>Seeders</b> → {task.seeders_num()} | <b>Leechers</b> → {task.leechers_num()}"
+                    msg += f"\n┠ <b>Seeders:</b> {task.seeders_num()} | <b>Leechers:</b> {task.leechers_num()}"
                 except Exception:
                     pass
         elif tstatus == MirrorStatus.STATUS_SEED:
-            msg += f"\n┠ <b>Size</b> → <i>{task.size()}</i> | <b>Uploaded</b>  → <i>{task.uploaded_bytes()}</i>"
-            msg += f"\n┠ <b>Status</b> → <b>{tstatus}</b>"
-            msg += f"\n┠ <b>Speed</b> → <i>{task.seed_speed()}</i>"
-            msg += f"\n┠ <b>Ratio</b> → <i>{task.ratio()}</i>"
-            msg += f"\n┠ <b>Time</b> → <i>{task.seeding_time()}</i> | <b>Elapsed</b> → <i>{get_readable_time(elapsed)}</i>"
+            msg += f"\n┠ <b>Size:</b> {task.size()} | <b>Uploaded:</b> {task.uploaded_bytes()}"
+            msg += f"\n┠ <b>Status:</b> <b>{tstatus}</b>"
+            msg += f"\n┠ <b>Speed:</b> {task.seed_speed()}"
+            msg += f"\n┠ <b>Ratio:</b> {task.ratio()}"
+            msg += f"\n┠ <b>Time:</b> {task.seeding_time()} | <b>Elapsed:</b> {get_readable_time(elapsed)}"
         else:
-            msg += f"\n┠ <b>Size</b> → <i>{task.size()}</i>"
-        msg += f"\n┠ <b>Engine</b> → <i>{task.engine}</i>"
-        msg += f"\n┠ <b>In Mode</b> → <i>{task.listener.mode[0]}</i>"
-        msg += f"\n┠ <b>Out Mode</b> → <i>{task.listener.mode[1]}</i>"
+            msg += f"\n┠ <b>Size</b>: {task.size()}"
+        msg += f"\n┠ <b>Engine:</b> {task.engine}"
+        msg += f"\n┠ <b>Mode:</b> {task.listener.mode[0]} | {task.listener.mode[1]}"
         # TODO: Add Bt Sel
-        msg += f"\n<b>┖ Stop</b> → <i>/{BotCommands.CancelTaskCommand[1]}_{task.gid()}</i>\n\n"
+        msg += f"\n┠<b>User: {task.listener.message.from_user.mention(style='html')}</b> | <b>ID:</b> <code>{task.listener.message.from_user.id}</code>"
+        # Added Bt Sel(Copy Paste Needed)
+        if hasattr(task, "seeders_num"):
+            msg+= f"<b>┠ Btsel:</b> <code>/{BotCommands.SelectCommand[1]} {task.gid()}</code>"
+        msg += f"\n<b>┖ Cancel:</b> /{BotCommands.CancelTaskCommand[1]}_{task.gid()}\n\n"
 
     if len(msg) == 0:
         if status == "All":

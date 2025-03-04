@@ -18,7 +18,6 @@ httpx
 langcodes
 jinja2
 lxml
-git+https://github.com/Hrishi2861/mega-sdk-py-4.8.0.git#egg=megasdk
 motor
 natsort
 par2cmdline-turbo
