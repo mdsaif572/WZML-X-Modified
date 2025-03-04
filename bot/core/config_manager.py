@@ -36,6 +36,8 @@ class Config:
     LEECH_FONT = ""
     LEECH_SPLIT_SIZE = 2097152000
     MEDIA_GROUP = False
+    MEGA_EMAIL = ""
+    MEGA_PASSWORD = ""
     HYBRID_LEECH = True
     HYPER_THREADS = 0
     NAME_SWAP = ""
