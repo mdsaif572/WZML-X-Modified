@@ -7,10 +7,10 @@ from aiohttp.client_exceptions import ClientError
 from ... import task_dict_lock, task_dict, LOGGER, intervals
 from ...core.config_manager import Config
 from ...core.torrent_manager import TorrentManager, is_metadata, aria2_name
-from ..ext_utils.bot_utils import bt_selection_buttons, sync_to_async
+from ..ext_utils.bot_utils import bt_selection_buttons
 from ..ext_utils.files_utils import clean_unwanted
-from ..ext_utils.status_utils import get_task_by_gid, get_readable_file_size
-from ..ext_utils.task_manager import stop_duplicate_check, limit_checker
+from ..ext_utils.status_utils import get_task_by_gid
+from ..ext_utils.task_manager import stop_duplicate_check
 from ..mirror_leech_utils.status_utils.aria2_status import Aria2Status
 from ..telegram_helper.message_utils import (
     send_message,
@@ -41,17 +41,6 @@ async def _on_download_started(api, data):
                         await delete_message(meta)
                         break
                     download = await api.tellStatus(gid)
-        task.listener.size = download.total_length
-        if not task.listener.select:
-            if limit_exceeded := await limit_checker(task.listener):
-                LOGGER.info(f"Aria2 Limit Exceeded: {task.listener.name} | {get_readable_file_size(task.listener.size)}")
-                await task.listener.on_download_error(limit_exceeded)
-                await sync_to_async(
-                    api.remove,
-                    [download],
-                    force=True,
-                    files=True
-                )
         return
     else:
         LOGGER.info(f"onDownloadStarted: {aria2_name(download)} - Gid: {gid}")

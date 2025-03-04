@@ -12,11 +12,9 @@ class Config:
     BOT_MAX_TASKS = 0
     BOT_PM = False
     CMD_SUFFIX = ""
-    CLONE_LIMIT = 0
     DATABASE_URL = ""
     DEFAULT_UPLOAD = "rc"
     DELETE_LINKS = False
-    DIRECT_LIMIT = 0
     EQUAL_SPLITS = False
     EXCLUDED_EXTENSIONS = ""
     FFMPEG_CMDS = {}
@@ -24,13 +22,11 @@ class Config:
     MEDIA_STORE = True
     FORCE_SUB_IDS = ""
     GDRIVE_ID = ""
-    GDRIVE_LIMIT = 0
     GD_DESP = "Uploaded with WZ Bot"
     INCOMPLETE_TASK_NOTIFIER = False
     INDEX_URL = ""
     IS_TEAM_DRIVE = False
     JD_EMAIL = ""
-    JD_LIMIT = 0
     JD_PASS = ""
     LEECH_DUMP_CHAT = ""
     CLEAN_LOG_MSG = False
@@ -39,22 +35,17 @@ class Config:
     LEECH_SUFFIX = ""
     LEECH_FONT = ""
     LEECH_SPLIT_SIZE = 2097152000
-    LEECH_LIMIT = 0
     MEDIA_GROUP = False
     MEGA_EMAIL = ""
-    MEGA_LIMIT = 0
     MEGA_PASSWORD = ""
     HYBRID_LEECH = True
     HYPER_THREADS = 0
     NAME_SWAP = ""
-    NZB_LIMIT = 0
     OWNER_ID = 0
-    PLAYLIST_LIMIT = 0
     QUEUE_ALL = 0
     QUEUE_DOWNLOAD = 0
     QUEUE_UPLOAD = 0
     RCLONE_FLAGS = ""
-    RCLONE_LIMIT = 0
     RCLONE_PATH = ""
     RCLONE_SERVE_URL = ""
     RCLONE_SERVE_USER = ""
@@ -70,7 +61,6 @@ class Config:
     STATUS_LIMIT = 10
     STATUS_UPDATE_INTERVAL = 15
     STOP_DUPLICATE = False
-    STORAGE_THRESHOLD = 1
     STREAMWISH_API = ""
     SUDO_USERS = ""
     TELEGRAM_API = 0
@@ -80,7 +70,6 @@ class Config:
     VERIFY_TIMEOUT = 0
     LOGIN_PASS = ""
     TORRENT_TIMEOUT = 0
-    TORRENT_LIMIT = 0
     TIMEZONE = "Asia/Kolkata"
     USER_MAX_TASKS = 0
     USER_TIME_INTERVAL = 0
@@ -93,9 +82,8 @@ class Config:
     USER_TRANSMISSION = True
     USE_SERVICE_ACCOUNTS = False
     WEB_PINCODE = True
-    YTDLP_LIMIT = 0
     YT_DLP_OPTIONS = {}
-    
+
     @classmethod
     def get(cls, key):
         return getattr(cls, key) if hasattr(cls, key) else None

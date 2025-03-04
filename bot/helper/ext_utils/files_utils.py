@@ -20,7 +20,6 @@ from ... import DOWNLOAD_DIR, LOGGER
 from ...core.torrent_manager import TorrentManager
 from .bot_utils import cmd_exec, sync_to_async
 from .exceptions import NotSupportedExtractionArchive
-from shutil import disk_usage
 
 ARCH_EXT = [
     ".tar.bz2",
@@ -425,20 +424,3 @@ class SevenZ:
                 stderr = "Unable to decode the error!"
             LOGGER.error(f"{stderr}. Unable to zip this path: {dl_path}")
             return dl_path
-
-def check_storage_threshold(size, threshold, arch=False, alloc=False):
-    free = disk_usage(DOWNLOAD_DIR).free
-    if not alloc:
-        if (
-            not arch
-            and free - size < threshold
-            or arch
-            and free - (size * 2) < threshold
-        ):
-            return False
-    elif not arch:
-        if free < threshold:
-            return False
-    elif free - size < threshold:
-        return False
-    return True

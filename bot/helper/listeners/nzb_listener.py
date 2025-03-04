@@ -9,7 +9,7 @@ from ... import (
 )
 from ..ext_utils.bot_utils import new_task
 from ..ext_utils.status_utils import get_task_by_gid
-from ..ext_utils.task_manager import stop_duplicate_check, limit_checker
+from ..ext_utils.task_manager import stop_duplicate_check
 
 
 async def _remove_job(nzo_id, mid):
@@ -23,23 +23,6 @@ async def _remove_job(nzo_id, mid):
         if nzo_id in nzb_jobs:
             del nzb_jobs[nzo_id]
 
-@new_task
-async def _size_checker(nzo_id):
-    task = await get_task_by_gid(nzo_id)
-    await task.update() # type: ignore
-    task.listener.size = speed_string_to_bytes(task.size()) # type: ignore
-    limit_exceeded = await limit_checker(
-        task.listener, # type: ignore
-        is_nzb=True
-    )
-    if limit_exceeded:
-        LOGGER.info(
-            f"NZB Limit Exceeded: {task.name()} | {task.size()}" # type: ignore
-        )
-        _on_download_error(
-            limit_exceeded,
-            nzo_id
-        ) # type: ignore
 
 @new_task
 async def _on_download_error(err, nzo_id, button=None):
@@ -105,7 +88,6 @@ async def _nzb_listener():
                     ):
                         nzb_jobs[nzo_id]["stop_dup_check"] = True
                         await _stop_duplicate(nzo_id)
-                        await _size_checker(nzo_id) # type: ignore
             except Exception as e:
                 LOGGER.error(str(e))
         await sleep(3)
