@@ -83,6 +83,7 @@ class TaskConfig:
         self.proceed_count = 0
         self.is_leech = False
         self.is_qbit = False
+        self.is_mega = False
         self.is_nzb = False
         self.is_jd = False
         self.is_clone = False
@@ -123,7 +124,6 @@ class TaskConfig:
         self.files_to_proceed = []
         self.is_super_chat = self.message.chat.type.name in ["SUPERGROUP", "CHANNEL"]
         self.source_url = None
-        self.isMega = False
         self.bot_pm = Config.BOT_PM or self.user_dict.get('BOT_PM')
         self.pm_msg = None
         self.file_details = {}
@@ -134,8 +134,8 @@ class TaskConfig:
         out_mode += " (Zip)" if self.compress else " (Unzip)" if self.extract else ""
 
         self.is_gdrive = is_gdrive_link(self.source_url) if self.source_url else False
-        self.is_Mega = is_mega_link(self.source_url) if self.source_url else False
-        in_mode = f"#{'Mega' if self.isMega else 'qBit' if self.is_qbit else 'SABnzbd' if self.is_nzb else 'JDown' if self.is_jd else 'ytdlp' if self.is_ytdlp else 'GDrive' if (self.is_clone or self.is_gdrive) else 'Aria2' if (self.source_url and self.source_url != self.message.link) else 'TgMedia'}"
+        self.is_mega = is_mega_link(self.source_url) if self.source_url else False
+        in_mode = f"#{'Mega' if self.is_mega else 'qBit' if self.is_qbit else 'SABnzbd' if self.is_nzb else 'JDown' if self.is_jd else 'ytdlp' if self.is_ytdlp else 'GDrive' if (self.is_clone or self.is_gdrive) else 'Aria2' if (self.source_url and self.source_url != self.message.link) else 'TgMedia'}"
 
         self.mode = (in_mode, out_mode)
 
