@@ -18,7 +18,7 @@ from ..helper.ext_utils.links_utils import (
     is_rclone_path,
     is_share_link,
 )
-from ..helper.ext_utils.task_manager import pre_task_check, stop_duplicate_check
+from ..helper.ext_utils.task_manager import pre_task_check, stop_duplicate_check, limit_checker
 from ..helper.listeners.task_listener import TaskListener
 from ..helper.mirror_leech_utils.download_utils.direct_link_generator import (
     direct_link_generator,
@@ -160,6 +160,11 @@ class Clone(TaskListener):
             msg, button = await stop_duplicate_check(self)
             if msg:
                 await send_message(self.message, msg, button)
+                return
+            if limit_exceeded := await limit_checker(self):
+                LOGGER.info(f"Clone Limit Exceeded: Name: {self.name} | Size: {self.size}")
+                smsg = await send_message(self.message, limit_exceeded)
+                await auto_delete_message(self.message, smsg)
                 return
             await self.on_download_start()
             LOGGER.info(f"Clone Started: Name: {self.name} - Source: {self.link}")

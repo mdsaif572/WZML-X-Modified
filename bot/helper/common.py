@@ -128,6 +128,7 @@ class TaskConfig:
         self.pm_msg = None
         self.file_details = {}
         self.mode = tuple()
+        self.is_playlist = False
 
     def _set_mode_engine(self):
         out_mode = f"#{'Leech' if self.is_leech else 'Clone' if self.is_clone else 'RClone' if self.up_dest.startswith('mrcc:') or is_rclone_path(self.up_dest) else 'GDrive' if self.up_dest.startswith(('mtp:', 'tp:', 'sa:')) or is_gdrive_id(self.up_dest) else 'UpHosters'}"

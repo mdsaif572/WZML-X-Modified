@@ -12,6 +12,7 @@ class YtDlpStatus:
         self._gid = gid
         self.listener = listener
         self.engine = EngineStatus().STATUS_YTDLP
+        self._isPlayList = self._obj.is_playlist
 
     def gid(self):
         return self._gid

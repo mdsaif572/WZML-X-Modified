@@ -143,6 +143,8 @@ class YoutubeDLHelper:
                     raise ValueError("Info result is None")
             except Exception as e:
                 return self._on_download_error(str(e))
+            if self.is_playlist:
+                self.playlist_count = result.get("playlist_count", 0)
             if "entries" in result:
                 for entry in result["entries"]:
                     if not entry:
