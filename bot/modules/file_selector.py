@@ -37,7 +37,7 @@ async def select(_, message):
         cmd_data = msg[1].split("@", maxsplit=1)
         if len(cmd_data) > 1 and cmd_data[1].strip() != TgClient.BNAME:
             return
-        gid = msg[0]
+        gid = cmd_data[0]
         task = await get_task_by_gid(gid)
         if task is None:
             await send_message(message, f"GID: <code>{gid}</code> Not Found.")
