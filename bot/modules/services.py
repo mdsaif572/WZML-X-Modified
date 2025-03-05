@@ -30,9 +30,10 @@ from ..helper.telegram_helper.message_utils import (
 async def start(_, message):
     userid = message.from_user.id
     buttons = ButtonMaker()
-    buttons.url_button("Git Repo", "https://www.github.com/SilentDemonSD/WZML-X")
-    buttons.url_button("Updates", "https://t.me/WZML_X")
+    buttons.url_button("Git Repo", "https://www.github.com/Hrishi2861/WZML-X-Modified")
+    buttons.url_button("Updates", "https://t.me/JetMirror")
     reply_markup = buttons.build_menu(2)
+    photo_id = "/usr/src/app/Jet.jpg"
 
     if len(message.command) > 1 and message.command[1] == "wzmlx":
         await delete_message(message)
@@ -86,18 +87,20 @@ async def start(_, message):
 This bot can mirror from links|tgfiles|torrents|nzb|rclone-cloud to any rclone cloud, Google Drive or to telegram.
 Type /{BotCommands.HelpCommand[0]} to get a list of available commands
 """
-        await send_message(message, start_string, reply_markup)
+        await send_message(message, start_string, reply_markup, photo=photo_id)
     elif Config.BOT_PM:
         await send_message(
             message,
             "<i>Now, Bot will send you all your files and links here. Start Using Now...</i>",
             reply_markup,
+            photo=photo_id
         )
     else:
         await send_message(
             message,
             "<i>Bot can mirror/leech from links|tgfiles|torrents|nzb|rclone-cloud to any rclone cloud, Google Drive or to telegram.\n\n⚠️ You Are not authorized user! Deploy your own WZML-X bot</i>",
             reply_markup,
+            photo=photo_id
         )
     await database.set_pm_users(userid)
 
