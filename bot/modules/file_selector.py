@@ -7,6 +7,7 @@ from .. import (
     LOGGER,
     sabnzbd_client,
 )
+from ..core.tg_client import TgClient
 from ..core.config_manager import Config
 from ..core.torrent_manager import TorrentManager
 from ..helper.ext_utils.bot_utils import (
@@ -31,9 +32,12 @@ async def select(_, message):
         await send_message(message, "Base URL not defined!")
         return
     user_id = message.from_user.id
-    msg = message.text.split()
+    msg = message.text.split("_", maxsplit=1)
     if len(msg) > 1:
-        gid = msg[1]
+        cmd_data = msg[1].split("@", maxsplit=1)
+        if len(cmd_data) > 1 and cmd_data[1].strip() != TgClient.BNAME:
+            return
+        gid = msg[0]
         task = await get_task_by_gid(gid)
         if task is None:
             await send_message(message, f"GID: <code>{gid}</code> Not Found.")
