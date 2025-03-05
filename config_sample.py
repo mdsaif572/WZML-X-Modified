@@ -64,6 +64,11 @@ RCLONE_SERVE_PASS = ""
 JD_EMAIL = ""
 JD_PASS = ""
 
+# Mega
+MEGA_EMAIL = ""
+MEGA_LIMIT = 0 #Only MEGA LIMIT Working
+MEGA_PASSWORD = ""
+
 # Sabnzbd
 USENET_SERVERS = [
     {
