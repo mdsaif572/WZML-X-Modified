@@ -1,5 +1,5 @@
 from aiofiles.os import remove, path as aiopath
-
+from bot import multi_tags
 from .. import (
     task_dict,
     task_dict_lock,
@@ -38,10 +38,14 @@ async def select(_, message):
         if len(cmd_data) > 1 and cmd_data[1].strip() != TgClient.BNAME:
             return
         gid = cmd_data[0]
-        task = await get_task_by_gid(gid)
-        if task is None:
-            await send_message(message, f"GID: <code>{gid}</code> Not Found.")
+        if len(gid) == 6:
+            multi_tags.discard(gid)
             return
+        else:
+            task = await get_task_by_gid(gid)
+            if task is None:
+                await send_message(message, f"GID: <code>{gid}</code> Not Found.")
+                return
     elif reply_to_id := message.reply_to_message_id:
         async with task_dict_lock:
             task = task_dict.get(reply_to_id)
