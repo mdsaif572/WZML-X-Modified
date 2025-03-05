@@ -1,9 +1,9 @@
 # REQUIRED CONFIG
-BOT_TOKEN = "8002680592:AAFJ2j50mAOWbKaq5OD3Dl6DDrFT715W0e8"
-OWNER_ID = 5839463933
-TELEGRAM_API = 21347898
-TELEGRAM_HASH = "98caf2e4f0c25e142c3cbb2e36e683ef"
-DATABASE_URL = "mongodb+srv://soxob80987:WxDvlkIywcasIG4A@cluster0.dtbgo.mongodb.net/"
+BOT_TOKEN = ""
+OWNER_ID = 0
+TELEGRAM_API = 0
+TELEGRAM_HASH = ""
+DATABASE_URL = ""
 
 # OPTIONAL CONFIG
 TG_PROXY = {}            # {"scheme": ”socks5”, "hostname": ””, "port": 1234, "username": ”user”, "password": ”pass”}
