@@ -210,7 +210,7 @@ def add_handlers():
         MessageHandler(
             get_rss_menu,
             filters=command(BotCommands.RssCommand, case_sensitive=True)
-            & CustomFilters.authorized,
+            & CustomFilters.sudo,
         )
     )
     TgClient.bot.add_handler(CallbackQueryHandler(rss_listener, filters=regex("^rss")))
