@@ -1,42 +1,24 @@
-from ...ext_utils.files_utils import get_path_size
 from ...ext_utils.status_utils import (
     MirrorStatus,
     EngineStatus,
     get_readable_file_size,
     get_readable_time,
 )
-from pkg_resources import get_distribution
 
 
-class YtDlpDownloadStatus:
+class YtDlpStatus:
     def __init__(self, listener, obj, gid):
         self._obj = obj
         self._gid = gid
         self.listener = listener
-        self._proccessed_bytes = 0
         self.engine = EngineStatus().STATUS_YTDLP
         self._isPlayList = self._obj.is_playlist
-
-    def _eng_ver(self):
-        return get_distribution("yt-dlp").version
-
-    def playList(self):
-        if self._isPlayList:
-            return f"{self._obj.playlist_index} / {self._obj.playlist_count}"
-        else:
-            return None
 
     def gid(self):
         return self._gid
 
     def processed_bytes(self):
-        return get_readable_file_size(self._proccessed_bytes)
-
-    async def processed_raw(self):
-        if self._obj.downloaded_bytes != 0:
-            self._proccessed_bytes = self._obj.downloaded_bytes
-        else:
-            self._proccessed_bytes = await get_path_size(self.listener.dir)
+        return get_readable_file_size(self._obj.downloaded_bytes)
 
     def size(self):
         return get_readable_file_size(self._obj.size)
@@ -47,8 +29,7 @@ class YtDlpDownloadStatus:
     def name(self):
         return self.listener.name
 
-    async def progress(self):
-        await self.processed_raw()
+    def progress(self):
         return f"{round(self._obj.progress, 2)}%"
 
     def speed(self):
@@ -59,7 +40,7 @@ class YtDlpDownloadStatus:
             return get_readable_time(self._obj.eta)
         try:
             seconds = (
-                self._obj.size - self._proccessed_bytes
+                self._obj.size - self._obj.downloaded_bytes
             ) / self._obj.download_speed
             return get_readable_time(seconds)
         except:
@@ -67,3 +48,4 @@ class YtDlpDownloadStatus:
 
     def task(self):
         return self._obj
+
