@@ -53,6 +53,7 @@ class YoutubeDLHelper:
         self._gid = ""
         self._ext = ""
         self.is_playlist = False
+        self.playlist_count = 0
         self.opts = {
             "progress_hooks": [self._on_download_progress],
             "logger": MyLogger(self, self._listener),
