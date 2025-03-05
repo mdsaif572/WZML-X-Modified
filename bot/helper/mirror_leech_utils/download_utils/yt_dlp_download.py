@@ -7,10 +7,11 @@ from yt_dlp import YoutubeDL, DownloadError
 
 from .... import task_dict_lock, task_dict
 from ...ext_utils.bot_utils import sync_to_async, async_to_sync
-from ...ext_utils.task_manager import check_running_tasks, stop_duplicate_check
+from ...ext_utils.task_manager import check_running_tasks, stop_duplicate_check, limit_checker, list_checker
 from ...mirror_leech_utils.status_utils.queue_status import QueueStatus
 from ...telegram_helper.message_utils import send_status_message
 from ..status_utils.yt_dlp_status import YtDlpStatus
+from ...ext_utils.status_utils import get_readable_file_size
 
 LOGGER = getLogger(__name__)
 
@@ -314,6 +315,22 @@ class YoutubeDLHelper:
         msg, button = await stop_duplicate_check(self._listener)
         if msg:
             await self._listener.on_download_error(msg, button)
+            return
+        self._listener.is_playlist = self.is_playlist
+        self._listener.playlist_count = self.playlist_count
+        limit_exceeded = await limit_checker(self._listener)
+        if limit_exceeded:
+            LOGGER.info(
+                f"Yt-Dlp Limit Exceeded: {self._listener.name} | {get_readable_file_size(self._listener.size)} | {self.playlist_count}"
+            )
+            await self._listener.on_download_error(limit_exceeded)
+            return
+        list_exceeded = await list_checker(self._listener)
+        if list_exceeded:
+            LOGGER.info(
+                f"Yt-Dlp Limit Exceeded: {self._listener.name} | {get_readable_file_size(self._listener.size)} | {self.playlist_count}"
+            )
+            await self._listener.on_download_error(list_exceeded)
             return
 
         add_to_queue, event = await check_running_tasks(self._listener)

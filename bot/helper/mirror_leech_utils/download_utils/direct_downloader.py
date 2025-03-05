@@ -1,15 +1,16 @@
 from secrets import token_hex
-
+from asyncio import sleep
 from .... import (
     LOGGER,
     task_dict,
     task_dict_lock,
 )
-from ...ext_utils.task_manager import check_running_tasks, stop_duplicate_check
+from ...ext_utils.task_manager import check_running_tasks, stop_duplicate_check, limit_checker
 from ...listeners.direct_listener import DirectListener
 from ...mirror_leech_utils.status_utils.direct_status import DirectStatus
 from ...mirror_leech_utils.status_utils.queue_status import QueueStatus
-from ...telegram_helper.message_utils import send_status_message
+from ...telegram_helper.message_utils import send_status_message, send_message, delete_links, auto_delete_message
+from ...ext_utils.status_utils import get_readable_file_size
 
 
 async def add_direct_download(listener, path):
@@ -26,6 +27,19 @@ async def add_direct_download(listener, path):
     msg, button = await stop_duplicate_check(listener)
     if msg:
         await listener.on_download_error(msg, button)
+        return
+    await sleep(1)
+    if limit_exceeded := await limit_checker(listener):
+        LOGGER.info(f"Direct Limit Exceeded: {listener.name} | {get_readable_file_size(listener.size)}")
+        amsg = await send_message(
+            listener.message,
+            limit_exceeded
+        )
+        await delete_links(listener.message)
+        await auto_delete_message(
+            listener.message,
+            amsg
+        )
         return
 
     gid = token_hex(5)
