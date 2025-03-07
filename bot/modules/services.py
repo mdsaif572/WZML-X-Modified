@@ -30,7 +30,7 @@ from ..helper.telegram_helper.message_utils import (
 async def start(_, message):
     userid = message.from_user.id
     buttons = ButtonMaker()
-    buttons.url_button("Git Repo", "https://www.github.com/Hrishi2861/WZML-X-Modified")
+    buttons.url_button("Owner", "https://t.me/terminator094")
     buttons.url_button("Updates", "https://t.me/cloud_station9")
     reply_markup = buttons.build_menu(2)
     photo_id = "/usr/src/app/Jet.jpg"
