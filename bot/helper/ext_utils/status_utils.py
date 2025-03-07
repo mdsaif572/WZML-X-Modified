@@ -192,7 +192,7 @@ def get_progress_bar_string(pct):
 
 
 async def get_readable_message(sid, is_user, page_no=1, status="All", page_step=1):
-    msg = "<a href='https://t.me/JetMirror'>𝑩𝒐𝒕 𝒃𝒚 🚀 𝑱𝒆𝒕-𝑴𝒊𝒓𝒓𝒐𝒓</a>\n"
+    msg = "<a href='https://t.me/cloud_station9'>Bot Of Cloud Station</a>\n"
     button = None
 
     tasks = await get_specific_tasks(status, sid if is_user else None)
@@ -217,7 +217,7 @@ async def get_readable_message(sid, is_user, page_no=1, status="All", page_step=
             tstatus = await task.status()
         else:
             tstatus = task.status()
-        msg += (f"\n<pre>#JetBot{index + start_position} ❤🚀...(Processing)</pre>\n")
+        msg += (f"\n<pre>#CsBot{index + start_position} ❤🚀...(Processing)</pre>\n")
         msg += f"<b><i>{escape(f'{task.name()}')}</i></b>"
         if task.listener.subname:
             msg += f"\n┖ <b>Sub Name</b>: <i>{task.listener.subname}</i>"
